@@ -1,0 +1,120 @@
+/* Page views */
+.page-view[hidden]{display:none!important}
+body{overflow-x:hidden}
+.subject-card{text-decoration:none}
+.subject-card:focus-visible,.mission-piece:focus-visible{outline:3px solid var(--coral);outline-offset:5px}
+.site-header{z-index:4}
+.studio-page,.board-page{background:#f5f6fc;min-height:calc(100vh - 180px);padding:38px 0 90px}
+.studio-topline{display:flex;align-items:center;justify-content:space-between;color:#5e6883;font-size:12px;font-weight:800;letter-spacing:.1em;margin-bottom:26px}
+.studio-topline .text-button{color:#25304e;text-decoration:none;font-size:14px;letter-spacing:0}
+.studio-topline .text-button:hover{text-decoration:underline}
+.studio-header{display:flex;justify-content:space-between;align-items:center;gap:30px;margin-bottom:32px}
+.studio-header .eyebrow,.board-heading .eyebrow{color:#cf605b;margin-bottom:10px}
+.studio-header h1,.board-heading h1{font:700 clamp(42px,5vw,66px)/1.05 'Space Grotesk',sans-serif;letter-spacing:-.055em;margin:0}
+.studio-header p:last-child{font-size:17px;color:#5e6883;margin:15px 0 0;line-height:1.5}
+.studio-icon{width:90px;height:90px;flex:none;border:2px solid var(--ink);border-radius:24px;display:grid;place-items:center;font-size:45px;box-shadow:5px 5px 0 var(--ink)}
+.studio-layout{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:22px;align-items:start}
+.knowledge-panel,.workshop-panel{border:2px solid var(--ink);border-radius:22px;background:#fff;box-shadow:6px 6px 0 var(--ink)}
+.knowledge-panel{padding:27px 25px 30px}
+.knowledge-panel .eyebrow,.workshop-heading .eyebrow{color:#d6645d;margin-bottom:9px}
+.knowledge-panel h2,.workshop-heading h2{font:700 27px/1.15 'Space Grotesk',sans-serif;letter-spacing:-.04em;margin:0}
+.note{display:flex;gap:13px;padding:22px 0;border-bottom:1px solid #dfe2eb}
+.note>span{display:grid;place-items:center;flex:none;width:27px;height:27px;border-radius:50%;background:#ffe1a7;font:700 11px 'Space Grotesk',sans-serif}
+.note h3{font:700 15px/1.25 'Space Grotesk',sans-serif;margin:2px 0 7px}
+.note p{font-size:13px;line-height:1.55;color:#5f6983;margin:0}
+.knowledge-tip{margin:22px 0 0;background:#e8edfc;border-radius:12px;padding:15px;font-size:13px;line-height:1.55;color:#344260;font-weight:650}
+.workshop-panel{padding:27px}
+.workshop-heading{display:flex;justify-content:space-between;gap:18px;align-items:start;margin-bottom:22px}
+.live-tag{background:#d6f0e8;border:1px solid #5f9e89;border-radius:30px;padding:7px 10px;color:#266b53;font-size:10px;font-weight:800;letter-spacing:.08em;white-space:nowrap}
+.activity-layout{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(210px,.8fr);gap:20px}
+.visual-stage{min-height:420px;border:2px solid #213055;border-radius:18px;background:radial-gradient(circle at 65% 25%,#303f78,#142047 65%,#101933);position:relative;overflow:hidden;display:grid;place-items:center;isolation:isolate;color:#fff}
+.stage-stars{position:absolute;inset:0;opacity:.5;pointer-events:none;background-image:radial-gradient(circle at 12% 16%,white 1px,transparent 2px),radial-gradient(circle at 78% 10%,white 1px,transparent 2px),radial-gradient(circle at 37% 67%,white 1px,transparent 2px),radial-gradient(circle at 87% 78%,white 1px,transparent 2px);background-size:180px 170px,220px 210px,200px 200px,160px 190px}
+.scene-caption{position:absolute;bottom:16px;left:14px;right:14px;text-align:center;background:#07122bba;border:1px solid #ffffff4d;border-radius:10px;padding:9px 12px;font-size:12px;font-weight:700;text-transform:capitalize;z-index:4}
+.control-panel{background:#f3f4fa;border:1px solid #dfe2eb;border-radius:17px;padding:20px}
+.control-panel h3{font:700 21px 'Space Grotesk',sans-serif;margin:0 0 6px}
+.control-panel>p{font-size:12px;line-height:1.45;color:#69738d;margin:0 0 18px}
+.control-field{display:block;font-size:13px;font-weight:700;margin:0 0 16px;color:#293451}
+.control-field strong{float:right;color:#74648a}
+.control-field select,.control-field input[type=range]{display:block;width:100%;margin-top:7px}
+.control-field select{border:2px solid #aeb6c9;background:#fff;border-radius:9px;padding:10px;color:#202b47;font:600 14px inherit}
+.control-field input[type=range]{accent-color:#e57567;cursor:pointer}
+.feedback{min-height:22px;margin:15px 0 0}
+.workshop-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:8px}
+.workshop-actions .button{font-size:13px}
+.board-heading{display:flex;align-items:end;justify-content:space-between;gap:30px;margin:20px 0 35px}
+.board-heading p:last-child{color:#5e6883;font-size:17px;line-height:1.5}
+.board-page .progress-track{max-width:650px}
+.board-page .mission-grid{grid-template-columns:repeat(3,1fr);margin-top:32px;gap:17px}
+.board-page .mission-piece{min-height:160px;text-decoration:none}
+.board-page .mission-piece small{margin-top:8px;font-size:11px}
+.mission-piece .board-art{font-size:26px;min-height:48px;display:flex;align-items:center;justify-content:center;gap:4px;filter:none}
+.board-planet{display:block;width:43px;height:43px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#fff8,var(--board-color) 48%,#29375f);position:relative}
+.board-planet.has-ring:after{content:"";position:absolute;inset:13px -9px;border:3px solid #b88968;border-radius:50%;transform:rotate(-20deg)}
+.board-patch{display:grid;place-items:center;width:44px;height:44px;border:3px solid #263252;background:var(--board-color);color:#263252;font-style:normal;font-size:25px}
+.board-patch.patch-circle{border-radius:50%}.board-patch.patch-shield{clip-path:polygon(10% 0,90% 0,100% 70%,50% 100%,0 70%)}.board-patch.patch-diamond{transform:rotate(45deg);border-radius:7px}
+
+/* Math cargo scene */
+.cargo-scene,.planet-scene,.patch-scene,.rocket-scene,.report-scene,.crew-scene{position:relative;width:100%;height:100%;min-height:420px;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:28px 20px 70px}
+.cargo-rocket{font-size:65px;line-height:1;margin-bottom:15px;filter:drop-shadow(0 12px 14px #0005)}
+.crew-row{font-size:30px;white-space:nowrap;letter-spacing:-8px;margin:0 9px 10px 0}
+.cargo-bay{width:min(85%,315px);min-height:95px;display:flex;align-content:center;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px;border:3px solid #bcd4ed;border-radius:13px;background:#cde8f12b;padding:10px}
+.water-pack{font-size:23px;line-height:1}
+.crate-row{font-size:23px;line-height:1.1;margin-top:9px}
+
+/* Planet laboratory */
+.made-planet{width:var(--planet-size);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 32% 26%,#ffffffa8,var(--planet-color) 43%,#20244b 150%);box-shadow:inset -23px -20px 22px #16214063,0 0 45px color-mix(in srgb,var(--planet-color) 45%,transparent);position:relative;max-width:330px;max-height:310px;z-index:2;transition:width .15s}
+.made-planet.shape-oval{aspect-ratio:.78;max-width:260px}
+.made-planet.shape-squashed{aspect-ratio:1.3;max-width:345px}
+.made-planet:before,.made-planet:after{content:"";position:absolute;left:-27%;right:-27%;top:38%;height:27%;border:10px solid #dfc3a6;border-radius:50%;transform:rotate(-23deg);pointer-events:none}
+.made-planet:after{top:30%;border-color:#eddfc4;transform:rotate(-23deg) scale(1.16,.82)}
+.made-planet.rings-none:before,.made-planet.rings-none:after,.made-planet.rings-single:after{display:none}
+.surface-detail{position:absolute;inset:15%;border-radius:50%;opacity:.5}
+.surface-craters .surface-detail{background:radial-gradient(circle at 30% 35%,#654d7166 0 8%,transparent 9%),radial-gradient(circle at 66% 70%,#654d7166 0 12%,transparent 13%),radial-gradient(circle at 72% 25%,#654d7166 0 5%,transparent 6%)}
+.surface-stripes .surface-detail{background:repeating-linear-gradient(170deg,transparent 0 18px,#ffffff80 19px 28px,transparent 29px 40px)}
+.surface-clouds .surface-detail{background:radial-gradient(ellipse at 30% 35%,#ffffffba 0 14%,transparent 17%),radial-gradient(ellipse at 70% 65%,#ffffffba 0 18%,transparent 20%)}
+
+/* Field report */
+.report-landscape{width:85%;height:145px;border-radius:65% 65% 15px 15px;background:linear-gradient(#e5af86,#c57778);display:grid;place-items:center;font-size:85px;color:#663f63;box-shadow:inset 0 -25px 0 #733f5b55}
+.report-card{width:85%;background:#fff;color:#1f2947;border-radius:12px;padding:16px 18px;margin-top:-20px;z-index:2;box-shadow:5px 7px 0 #101733}
+.report-card span,.plan-board small{display:block;color:#bd5b5a;font-size:10px;font-weight:800;letter-spacing:.13em;margin-bottom:9px}
+.report-card strong{font:700 18px/1.35 'Space Grotesk',sans-serif}
+.report-card p{font-size:13px;margin:8px 0 0}
+
+/* Art patch */
+.made-patch{width:190px;height:190px;border:10px solid #fff;background:var(--patch-color);color:#182345;display:grid;place-items:center;box-shadow:0 12px 25px #0006}
+.made-patch span{font-size:85px;text-shadow:2px 3px #ffffff77}
+.made-patch.patch-circle{border-radius:50%}
+.made-patch.patch-shield{clip-path:polygon(10% 0,90% 0,100% 70%,50% 100%,0 70%)}
+.made-patch.patch-diamond{transform:rotate(45deg);border-radius:22px}
+.made-patch.patch-diamond span{transform:rotate(-45deg)}
+.made-patch.border-dashed{border-style:dashed}
+
+/* Rocket builder */
+.made-rocket{width:145px;height:270px;position:relative;margin-top:-30px;filter:drop-shadow(10px 12px 6px #0005)}
+.made-body{position:absolute;top:65px;left:35px;width:75px;height:150px;background:linear-gradient(90deg,#b6c4dc,var(--rocket-color) 32%,var(--rocket-color) 72%,#9cabc5);border:3px solid #fff;border-radius:12px 12px 16px 16px;z-index:2}
+.made-nose{position:absolute;top:0;left:35px;width:75px;height:72px;background:#ed7971;clip-path:polygon(50% 0,100% 100%,0 100%);z-index:2}
+.nose-round .made-nose{border-radius:55% 55% 0 0;clip-path:none}
+.nose-flat .made-nose{top:34px;height:38px;clip-path:none;border-radius:8px 8px 0 0}
+.made-window{position:absolute;top:34px;left:19px;width:32px;height:32px;background:#8bd8e9;border:5px solid #5369a4;border-radius:50%}
+.made-fin{position:absolute;top:159px;width:43px;height:70px;background:#ed7971;z-index:1}
+.made-fin.left{left:1px;clip-path:polygon(100% 0,100% 100%,0 100%)}
+.made-fin.right{right:1px;clip-path:polygon(0 0,100% 100%,0 100%)}
+.fins-small .made-fin{height:45px;top:184px;width:35px}
+.fins-swept .made-fin.left{clip-path:polygon(100% 0,100% 100%,0 65%)}
+.fins-swept .made-fin.right{clip-path:polygon(0 0,100% 65%,0 100%)}
+.made-flame{position:absolute;top:211px;left:53px;width:38px;height:72px;border-radius:0 0 60% 60%;background:linear-gradient(#ffdc78,#ff8e56,transparent);z-index:0}
+.made-flame.flame-blue{background:linear-gradient(#e4ffff,#58bbed,transparent)}
+.made-flame.flame-violet{background:linear-gradient(#ffeaff,#a576e6,transparent)}
+
+/* Crew planning */
+.crew-pair{display:flex;align-items:center;gap:12px}
+.crew-pair>div{width:105px;height:126px;background:#eaf0fc;border:3px solid #fff;border-radius:15px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#1f2947;box-shadow:4px 5px 0 #111c3e}
+.crew-pair span{font-size:48px}
+.crew-pair strong{font-size:12px;margin-top:5px}
+.crew-pair b{font-size:28px;color:#ffcf61}
+.plan-board{background:#fff;color:#1f2947;border-radius:12px;padding:16px 20px;min-width:230px;text-align:center;margin-top:20px}
+.plan-board strong{font-size:15px}
+
+@media(max-width:1000px){.studio-layout{grid-template-columns:240px minmax(0,1fr)}.activity-layout{grid-template-columns:1fr}.visual-stage{min-height:340px}.cargo-scene,.planet-scene,.patch-scene,.rocket-scene,.report-scene,.crew-scene{min-height:340px}.control-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 15px}.control-panel h3,.control-panel>p{grid-column:1/-1}}
+@media(max-width:700px){.studio-page,.board-page{padding:25px 0 65px}.studio-header{align-items:start}.studio-header h1{font-size:42px}.studio-icon{width:62px;height:62px;font-size:33px;border-radius:16px}.studio-layout{grid-template-columns:1fr}.knowledge-panel{order:2}.workshop-panel{order:1;padding:18px}.workshop-heading h2{font-size:24px}.visual-stage{min-height:340px}.board-heading{display:block}.board-heading .button{margin-top:10px}.board-page .mission-grid{grid-template-columns:repeat(2,1fr)}.studio-topline{margin-bottom:22px}.knowledge-panel{padding:22px}}
+@media(max-width:430px){.control-panel{grid-template-columns:1fr}.live-tag{display:none}.board-page .mission-grid{grid-template-columns:1fr}.visual-stage{min-height:320px}.cargo-scene,.planet-scene,.patch-scene,.rocket-scene,.report-scene,.crew-scene{min-height:320px}.studio-header h1{font-size:35px}.made-planet{max-width:230px}.workshop-actions .button{width:100%}}

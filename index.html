@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a3a">
+  <meta name="description" content="Explore six school subjects through hands-on space activities.">
+  <title>Space Is for Everyone — Activity Studio</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="studio.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to activity</a>
+  <div class="app-shell">
+    <aside class="app-sidebar" aria-label="Subjects and mission notes">
+      <a class="brand sidebar-brand" href="#studio/math" aria-label="Space Is for Everyone, Math activity"><span class="brand-mark">✦</span><span>SPACE IS<br>FOR EVERYONE</span></a>
+      <div class="sidebar-intro"><p class="eyebrow">YOUR SPACE MISSION</p><h2>Pick a subject.<br>Make something.</h2><p>Choose an activity and try your ideas.</p></div>
+      <nav class="subject-nav" aria-label="Choose a subject"><p class="sidebar-label">SUBJECTS</p><div id="subject-list"></div></nav>
+      <a class="board-nav" id="board-nav" href="#mission-board"><span aria-hidden="true">▦</span><span>My mission board<small id="sidebar-progress">0 of 6 pieces saved</small></span><span aria-hidden="true">↗</span></a>
+      <section class="sidebar-notes" id="sidebar-notes" aria-labelledby="notes-title"><p class="sidebar-label">MISSION NOTES</p><h2 id="notes-title">Ideas to try</h2><div id="studio-notes"></div><p class="knowledge-tip" id="studio-tip"></p></section>
+    </aside>
+    <main id="main" class="app-main">
+      <section id="studio-view" class="page-view studio-page" aria-labelledby="studio-title">
+        <div class="studio-topline"><span id="studio-count"></span><span>EXPLORE · CREATE · SAVE</span></div>
+        <div class="studio-header"><div><p class="eyebrow" id="studio-kicker"></p><h1 id="studio-title"></h1><p id="studio-intro"></p></div><div class="studio-icon" id="studio-icon" aria-hidden="true"></div></div>
+        <div class="workshop-panel"><div class="workshop-heading"><div><p class="eyebrow">HANDS-ON ACTIVITY</p><h2 id="workshop-title"></h2></div><span class="live-tag">LIVE PREVIEW</span></div><div id="activity-area"></div><p class="feedback" id="feedback" role="status" aria-live="polite"></p><div class="workshop-actions"><button class="button button-primary" id="save-creation" type="button">Add to mission board →</button><a class="button button-quiet" id="next-subject" href="#studio/science">Next subject →</a></div></div>
+      </section>
+      <section id="board-view" class="page-view board-page" aria-labelledby="board-title" hidden><div class="board-heading"><div><p class="eyebrow">YOUR MISSION BOARD</p><h1 id="board-title">Look what you’re building.</h1><p>Each activity adds a piece to your mission. Your designs stay on this device.</p></div><a class="button button-primary" href="#studio/math">Explore activities ↗</a></div><div class="progress-track" role="progressbar" aria-label="Mission pieces collected" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0" id="progress-track"><span id="progress-fill"></span></div><p class="progress-label" id="progress-label">0 of 6 mission pieces collected</p><div class="mission-grid" id="mission-grid"></div></section>
+    </main>
+  </div>
+</body>
+</html>
