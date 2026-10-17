@@ -91,6 +91,23 @@ function renderSubjectList(activeId) {
   $('subject-list').innerHTML = subjects.map((s, i) => `<a class="subject-link ${activeId === s.id ? 'is-active' : ''} ${completed[s.id] ? 'is-complete' : ''}" href="#studio/${s.id}" ${activeId === s.id ? 'aria-current="page"' : ''} style="--subject-color:${s.color}"><span class="subject-link-icon" aria-hidden="true">${s.icon}</span><span class="subject-link-name"><small>PLANET 0${i + 1}</small>${s.name}</span><span class="subject-link-done" aria-label="${completed[s.id] ? 'Completed' : ''}">${completed[s.id] ? '✓' : '↗'}</span></a>`).join('');
   $('sidebar-progress').textContent = `${subjects.filter(s => completed[s.id]).length} of 6 planets complete`;
 }
+function renderHome() {
+  const count = subjects.filter(s => completed[s.id]).length;
+  const next = subjects.find(s => !completed[s.id] && lessonState(s.id).step > 0) || nextUnfinished(subjects[subjects.length - 1].id);
+  $('home-count').textContent = `${count} / 6`;
+  $('home-progress').setAttribute('aria-valuenow', String(count));
+  $('home-progress-fill').style.width = `${count / subjects.length * 100}%`;
+  $('home-tracker-copy').textContent = count === 6 ? 'Every planet is glowing. Your certificate is ready!' : count === 0 ? 'Your next discovery is waiting.' : `${6 - count} ${6 - count === 1 ? 'planet' : 'planets'} left to explore.`;
+  $('home-launch').href = next ? `#studio/${next.id}` : '#certificate';
+  $('home-launch').textContent = next ? `Explore ${next.name} →` : 'View my certificate →';
+  $('home-planet-grid').innerHTML = subjects.map((s, i) => {
+    const done = Boolean(completed[s.id]);
+    const step = lessonState(s.id).step;
+    const status = done ? `★ ${badges[s.id]} badge` : step > 0 ? `Continue · Step ${step + 1} of 4` : 'Ready to explore';
+    return `<a class="home-planet-card ${done ? 'is-complete' : ''}" href="#studio/${s.id}" style="--planet-color:${s.color}" aria-label="${s.name}, ${done ? 'completed' : status}"><span class="home-card-number">PLANET 0${i + 1}</span><span class="home-card-check" aria-hidden="true">${done ? '✓' : '✦'}</span><span class="home-card-orbit" aria-hidden="true"><span class="home-card-planet">${s.icon}</span></span><strong>${s.name}</strong><span class="home-card-caption">${s.teaser}</span><span class="home-card-status">${status} <b aria-hidden="true">↗</b></span></a>`;
+  }).join('');
+  $('home-certificate').innerHTML = count === 6 ? '<span aria-hidden="true">✦</span><div><p class="eyebrow">FINAL REWARD UNLOCKED</p><h2>Space Explorer Certificate</h2><p>You finished all six subject planets. Celebrate your adventure!</p></div><a class="button button-primary" href="#certificate">See certificate →</a>' : `<span aria-hidden="true">✧</span><div><p class="eyebrow">FINAL REWARD</p><h2>Space Explorer Certificate</h2><p>Complete all six planets to unlock your special certificate.</p></div><strong>${count} / 6</strong>`;
+}
 function renderBoard() {
   const count = subjects.filter(s => completed[s.id]).length;
   $('progress-fill').style.width = `${count / subjects.length * 100}%`;
@@ -114,16 +131,19 @@ function renderBoard() {
 function showRoute() {
   const hash = decodeURIComponent(location.hash.slice(1));
   const studioId = hash.startsWith('studio/') ? hash.slice(7) : null;
-  const subject = subjects.find(s => s.id === studioId) || subjects[0];
+  const subject = subjects.find(s => s.id === studioId);
   const completedId = hash.startsWith('complete/') ? hash.slice(9) : null;
   const completedSubject = subjects.find(s => s.id === completedId && completed[s.id]);
-  const view = hash === 'mission-board' ? 'board' : hash === 'certificate' && subjects.every(s => completed[s.id]) ? 'certificate' : completedSubject ? 'complete' : 'studio';
+  const view = hash === 'mission-board' ? 'board' : hash === 'certificate' && subjects.every(s => completed[s.id]) ? 'certificate' : completedSubject ? 'complete' : subject ? 'studio' : 'home';
+  $('home-view').hidden = view !== 'home';
   $('studio-view').hidden = view !== 'studio';
   $('board-view').hidden = view !== 'board';
   $('complete-view').hidden = view !== 'complete';
   $('certificate-view').hidden = view !== 'certificate';
   $('sidebar-notes').hidden = view !== 'studio';
   $('board-nav').classList.toggle('is-active', view === 'board');
+  $('home-nav').classList.toggle('is-active', view === 'home');
+  if (view === 'home') renderHome();
   if (view === 'studio') openStudio(subject);
   renderSubjectList(view === 'studio' ? subject.id : null);
   if (view === 'board') renderBoard();
