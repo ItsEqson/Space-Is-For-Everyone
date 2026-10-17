@@ -1,6 +1,8 @@
 # Space Is for Everyone
 
-A small, interactive website for elementary school learners. One activity workspace puts subject selection and short learning notes in the side panel, with the current visual activity in the main area. Kids can plan supplies, design a planet, compose a field report, make a patch, build a rocket, or assemble a crew plan. Controls update each creation live, and saved creations appear on the mission board. Progress and designs are saved in the browser with `localStorage`.
+A space-themed activity studio for elementary school students. The subject chooser and one short lesson idea at a time stay in the side panel, while a live creative activity fills the main area. Students can pack a rocket, model a planet, compose a field report, design a mission patch, build a rocket, and plan a crew. There are no quiz questions.
+
+Finishing an activity awards a subject badge, lights up its planet on the mission board, and suggests another unfinished subject. Completing all six unlocks a printable Space Explorer Certificate. Lesson position, creations, completed planets, and badges save automatically in browser `localStorage`. Existing saved creations and progress from the earlier activity studio are retained on the same device and browser.
 
 ## Run locally
 

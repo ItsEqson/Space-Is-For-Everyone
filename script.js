@@ -7,23 +7,25 @@ const subjects = [
     ['Gravity shapes worlds', 'Gravity pulls material toward a planet’s center, making large worlds nearly round.'],
     ['Surfaces tell stories', 'A world can look rocky, icy, or cloudy. Scientists study clues in its surface.'],
     ['Rings are many pieces', 'Planetary rings are made of many small bits of ice, dust, or rock.'] ] },
-  { id: 'reading', name: 'Reading & Writing', icon: '✎', color: '#cbdafa', piece: 'Explorer message', teaser: 'Compose a visual report for mission control.', title: 'Send a field report', tip: 'Choose what you discovered, where it is, and what the crew should do next.', notes: [
+  { id: 'reading', name: 'English', icon: '✎', color: '#cbdafa', piece: 'Explorer message', teaser: 'Compose a visual report for mission control.', title: 'Send a field report', tip: 'Choose what you discovered, where it is, and what the crew should do next.', notes: [
     ['Observe closely', 'Explorers notice details before they report a discovery.'],
     ['Give a location', 'A clear report helps the crew find the same place.'],
     ['Share a next step', 'Good communication helps teammates decide what to do.'] ] },
-  { id: 'art', name: 'Art & Design', icon: '✦', color: '#f7cbd4', piece: 'Mission patch', teaser: 'Design a patch using shapes and symbols.', title: 'Design a mission patch', tip: 'Try a shape, symbol, and color combination that tells your mission’s story.', notes: [
+  { id: 'art', name: 'Art', icon: '✦', color: '#f7cbd4', piece: 'Mission patch', teaser: 'Design a patch using shapes and symbols.', title: 'Design a mission patch', tip: 'Try a shape, symbol, and color combination that tells your mission’s story.', notes: [
     ['Shapes have meaning', 'A circle can suggest a planet; a shield can suggest protection.'],
     ['Color catches attention', 'Strong color choices make a design easy to spot.'],
     ['Keep it clear', 'A simple symbol is easier for a crew to recognize.'] ] },
-  { id: 'engineering', name: 'Engineering & Technology', icon: '⚙', color: '#dfd0f5', piece: 'Rocket design', teaser: 'Change a rocket’s parts and test its look.', title: 'Build your rocket', tip: 'Experiment with the nose, fins, engine flame, and body color.', notes: [
+  { id: 'engineering', name: 'Technology', icon: '⚙', color: '#dfd0f5', piece: 'Rocket design', teaser: 'Change a rocket’s parts and test its look.', title: 'Build your rocket', tip: 'Experiment with the nose, fins, engine flame, and body color.', notes: [
     ['Start with a model', 'Engineers build models to try out a design before making a full spacecraft.'],
     ['Parts have jobs', 'The body carries cargo, the engine pushes, and fins can help a model stay steady.'],
     ['Improve and try again', 'Each change is a chance to test a new idea.'] ] },
-  { id: 'history', name: 'History & Teamwork', icon: '✋', color: '#f8d7b8', piece: 'Crew plan', teaser: 'Build a crew and a plan for the next launch.', title: 'Plan the next mission', tip: 'Assign crew jobs and choose how the team will improve after a test.', notes: [
-    ['Learn from earlier tests', 'Teams record what happened so they can improve the next attempt.'],
-    ['Different people help', 'A mission needs builders, explorers, communicators, and careful planners.'],
-    ['Decide together', 'Sharing observations helps a crew make a stronger plan.'] ] }
+  { id: 'history', name: 'History', icon: '✋', color: '#f8d7b8', piece: 'Crew plan', teaser: 'Build a crew and a plan for the next launch.', title: 'Plan the next mission', tip: 'Assign crew jobs and choose how the team will improve after a test.', notes: [
+    ['A giant first step', 'In 1969, the Apollo 11 crew landed on the Moon. Their mission took years of planning.'],
+    ['Many people made it happen', 'Builders, pilots, scientists, and communicators all helped the crew reach the Moon.'],
+    ['History helps the next crew', 'Teams keep records of discoveries and tests so future missions can improve.'] ] }
 ];
+subjects.sort((a, b) => ['science','math','reading','history','art','engineering'].indexOf(a.id) - ['science','math','reading','history','art','engineering'].indexOf(b.id));
+const badges = { science:'Cosmic Scientist', math:'Rocket Mathematician', reading:'Star Storyteller', history:'Time Traveler', art:'Galaxy Artist', engineering:'Space Inventor' };
 
 const defaults = {
   math: { crew: 2, packs: 3, cargo: 2 },
@@ -37,14 +39,38 @@ const palettes = { coral: '#f19277', mint: '#83d8bd', violet: '#bda6ed', blue: '
 const storeKey = 'space-is-for-everyone-progress-v2';
 const oldStoreKey = 'space-is-for-everyone-progress-v1';
 const designKey = 'space-is-for-everyone-designs-v2';
+const stepsKey = 'space-is-for-everyone-lesson-steps-v1';
+const recentKey = 'space-is-for-everyone-missions-v3';
 const $ = id => document.getElementById(id);
 const safeRead = key => { try { return JSON.parse(localStorage.getItem(key)) || {}; } catch { return {}; } };
 const previous = safeRead(oldStoreKey);
 let completed = safeRead(storeKey);
 let savedDesigns = safeRead(designKey);
+let lessonSteps = safeRead(stepsKey);
 let activeSubject = null;
 let working = null;
 for (const subject of subjects) if (previous[subject.id] && !completed[subject.id]) completed[subject.id] = { legacy: true };
+const recent = safeRead(recentKey);
+for (const subject of subjects) {
+  const oldId = subject.id === 'reading' ? 'english' : subject.id === 'engineering' ? 'technology' : subject.id;
+  if (recent[oldId]?.completed && !completed[subject.id]) completed[subject.id] = { badge: badges[subject.id], created: true };
+  if (recent[oldId]?.step && !lessonSteps[subject.id]) lessonSteps[subject.id] = { step: Math.min(3, recent[oldId].step), touched: false };
+  if (completed[subject.id]) completed[subject.id].badge = badges[subject.id];
+}
+try { localStorage.setItem(storeKey, JSON.stringify(completed)); } catch {}
+function lessonState(id) {
+  const raw = lessonSteps[id] || {};
+  return { step: Number.isInteger(raw.step) ? Math.max(0, Math.min(3, raw.step)) : 0, touched: raw.touched === true };
+}
+function saveLessons() { try { localStorage.setItem(stepsKey, JSON.stringify(lessonSteps)); } catch {} }
+function nextUnfinished(afterId) {
+  const start = subjects.findIndex(s => s.id === afterId);
+  for (let i = 1; i <= subjects.length; i++) {
+    const subject = subjects[(start + i) % subjects.length];
+    if (!completed[subject.id]) return subject;
+  }
+  return null;
+}
 
 function escapeHTML(value) { return String(value).replace(/[&<>"']/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char])); }
 function validState(id, candidate) {
@@ -62,14 +88,14 @@ function validState(id, candidate) {
 }
 
 function renderSubjectList(activeId) {
-  $('subject-list').innerHTML = subjects.map((s, i) => `<a class="subject-link ${activeId === s.id ? 'is-active' : ''}" href="#studio/${s.id}" ${activeId === s.id ? 'aria-current="page"' : ''} style="--subject-color:${s.color}"><span class="subject-link-icon" aria-hidden="true">${s.icon}</span><span class="subject-link-name"><small>0${i + 1}</small>${s.name}</span><span class="subject-link-done" aria-label="${completed[s.id] ? 'Saved to mission board' : ''}">${completed[s.id] ? '✓' : '↗'}</span></a>`).join('');
-  $('sidebar-progress').textContent = `${subjects.filter(s => completed[s.id]).length} of 6 pieces saved`;
+  $('subject-list').innerHTML = subjects.map((s, i) => `<a class="subject-link ${activeId === s.id ? 'is-active' : ''} ${completed[s.id] ? 'is-complete' : ''}" href="#studio/${s.id}" ${activeId === s.id ? 'aria-current="page"' : ''} style="--subject-color:${s.color}"><span class="subject-link-icon" aria-hidden="true">${s.icon}</span><span class="subject-link-name"><small>PLANET 0${i + 1}</small>${s.name}</span><span class="subject-link-done" aria-label="${completed[s.id] ? 'Completed' : ''}">${completed[s.id] ? '✓' : '↗'}</span></a>`).join('');
+  $('sidebar-progress').textContent = `${subjects.filter(s => completed[s.id]).length} of 6 planets complete`;
 }
 function renderBoard() {
   const count = subjects.filter(s => completed[s.id]).length;
   $('progress-fill').style.width = `${count / subjects.length * 100}%`;
   $('progress-track').setAttribute('aria-valuenow', String(count));
-  $('progress-label').textContent = `${count} of 6 mission pieces collected${count === 6 ? ' — mission ready!' : ''}`;
+  $('progress-label').textContent = `${count} of 6 planets complete${count === 6 ? ' — certificate unlocked!' : ''}`;
   $('mission-grid').innerHTML = subjects.map(s => {
     const result = completed[s.id];
     const state = validState(s.id, savedDesigns[s.id]);
@@ -81,22 +107,61 @@ function renderBoard() {
       engineering: '🚀',
       history: { explorer:'🧑‍🚀', scientist:'🔬', pilot:'👩‍✈️' }[state.captain] + ' + ' + { engineer:'🛠️', artist:'🎨', writer:'✎' }[state.helper]
     }[s.id];
-    return `<a class="mission-piece ${result ? 'is-complete' : ''}" href="#studio/${s.id}"><span class="board-art" aria-hidden="true">${icon}</span><strong>${s.piece}</strong><small>${result ? 'Edit creation ↗' : 'Open studio ↗'}</small></a>`;
+    return `<a class="mission-piece ${result ? 'is-complete' : ''}" href="#studio/${s.id}"><span class="board-art" aria-hidden="true">${icon}</span><strong>${s.name} ${result ? '✓' : ''}</strong><small>${result ? '★ ' + badges[s.id] + ' badge' : 'Visit planet ↗'}</small></a>`;
   }).join('');
+  $('board-certificate').innerHTML = count === 6 ? '<span aria-hidden="true">✦</span><div><strong>Space Explorer Certificate unlocked!</strong><p>You explored every subject. Your special reward is ready.</p></div><a class="button button-primary" href="#certificate">View certificate →</a>' : `<span aria-hidden="true">✧</span><div><strong>Space Explorer Certificate</strong><p>Light up all six planets to unlock your final reward.</p></div><span class="certificate-lock">${count} / 6</span>`;
 }
 function showRoute() {
   const hash = decodeURIComponent(location.hash.slice(1));
   const studioId = hash.startsWith('studio/') ? hash.slice(7) : null;
   const subject = subjects.find(s => s.id === studioId) || subjects[0];
-  const view = hash === 'mission-board' ? 'board' : 'studio';
+  const completedId = hash.startsWith('complete/') ? hash.slice(9) : null;
+  const completedSubject = subjects.find(s => s.id === completedId && completed[s.id]);
+  const view = hash === 'mission-board' ? 'board' : hash === 'certificate' && subjects.every(s => completed[s.id]) ? 'certificate' : completedSubject ? 'complete' : 'studio';
   $('studio-view').hidden = view !== 'studio';
   $('board-view').hidden = view !== 'board';
-  $('sidebar-notes').hidden = view === 'board';
+  $('complete-view').hidden = view !== 'complete';
+  $('certificate-view').hidden = view !== 'certificate';
+  $('sidebar-notes').hidden = view !== 'studio';
   $('board-nav').classList.toggle('is-active', view === 'board');
   if (view === 'studio') openStudio(subject);
   renderSubjectList(view === 'studio' ? subject.id : null);
   if (view === 'board') renderBoard();
+  if (view === 'complete') renderComplete(completedSubject);
+  if (view === 'certificate') renderCertificate();
   requestAnimationFrame(() => window.scrollTo(0, 0));
+}
+function renderLesson() {
+  const state = lessonState(activeSubject.id);
+  const step = state.step;
+  $('step-label').textContent = `Step ${step + 1} of 4`;
+  $('lesson-progress').setAttribute('aria-valuenow', String(step + 1));
+  $('lesson-progress-fill').style.width = `${(step + 1) * 25}%`;
+  $('notes-title').textContent = step === 3 ? 'Now make it yours!' : activeSubject.notes[step][0];
+  $('studio-notes').innerHTML = step === 3 ? `<p class="lesson-copy">Try the controls in the activity. When you like your creation, finish the mission to earn your badge.</p>` : `<p class="lesson-copy">${activeSubject.notes[step][1]}</p>`;
+  $('studio-tip').textContent = step === 3 ? activeSubject.tip : 'The activity stays open while you learn. Try an idea as you read!';
+  $('previous-note').hidden = step === 0;
+  $('next-note').hidden = step === 3;
+  $('save-creation').textContent = completed[activeSubject.id] ? 'Update my creation ✓' : 'Finish mission & earn a star ★';
+  $('save-creation').classList.toggle('is-waiting', step < 3);
+}
+function changeLesson(delta) {
+  if (!activeSubject) return;
+  const state = lessonState(activeSubject.id);
+  state.step = Math.max(0, Math.min(3, state.step + delta));
+  lessonSteps[activeSubject.id] = state;
+  saveLessons();
+  renderLesson();
+}
+function renderComplete(subject) {
+  $('complete-message').textContent = `Your ${subject.piece.toLowerCase()} is saved. The ${subject.name} planet is glowing on your mission board!`;
+  $('badge-award').innerHTML = `<span aria-hidden="true">★</span><div><small>NEW BADGE EARNED</small><strong>${badges[subject.id]}</strong></div>`;
+  const next = nextUnfinished(subject.id);
+  $('complete-next').href = next ? `#studio/${next.id}` : '#certificate';
+  $('complete-next').textContent = next ? `Explore ${next.name} next →` : 'Get my certificate →';
+}
+function renderCertificate() {
+  $('certificate-badges').innerHTML = subjects.map(s => `<span title="${s.name}" style="--badge-color:${s.color}">${s.icon}</span>`).join('');
 }
 function openStudio(subject) {
   if (activeSubject?.id !== subject.id) {
@@ -112,11 +177,11 @@ function openStudio(subject) {
   $('studio-icon').style.background = subject.color;
   $('workshop-title').textContent = subject.title;
   $('studio-tip').textContent = subject.tip;
-  $('studio-notes').innerHTML = subject.notes.map((note, n) => `<article class="note"><span>0${n + 1}</span><div><h3>${note[0]}</h3><p>${note[1]}</p></div></article>`).join('');
+  renderLesson();
   $('feedback').textContent = '';
-  $('save-creation').textContent = completed[subject.id] ? 'Update mission piece ✓' : 'Add to mission board →';
-  $('next-subject').href = `#studio/${subjects[(i + 1) % subjects.length].id}`;
-  $('next-subject').textContent = i === subjects.length - 1 ? 'First subject →' : 'Next subject →';
+  const next = nextUnfinished(subject.id);
+  $('next-subject').href = `#studio/${next ? next.id : subjects[(i + 1) % subjects.length].id}`;
+  $('next-subject').textContent = next ? `Choose ${next.name} →` : 'Choose another subject →';
   renderActivity();
 }
 function select(label, key, values) {
@@ -144,7 +209,7 @@ function renderActivity(previewOnly = false) {
     const places = { north:'North plain', valley:'Valley', ridge:'Ridge' };
     const actions = { explore:'Explore it', photograph:'Take photos', map:'Map the area' };
     visual = stage(`<div class="report-scene"><div class="report-landscape"><span>${finds[working.find][0]}</span></div><div class="report-card"><span>FIELD REPORT · SOL 01</span><strong>We found ${finds[working.find][1].toLowerCase()} at the ${places[working.place].toLowerCase()}.</strong><p>Next step: ${actions[working.action]}.</p></div></div>`, `Field report showing ${finds[working.find][1]} at the ${places[working.place]}`);
-    controls = select('What did you find?', 'find', [['craters','Craters'],['ice','Ice'],['rocks','Rocks']]) + select('Where?', 'place', [['north','North plain'],['valley','Valley'],['ridge','Ridge']]) + select('Next step', 'action', [['explore','Explore it'],['photograph','Take photos'],['map','Map the area']]);
+    controls = select('Discovery', 'find', [['craters','Craters'],['ice','Ice'],['rocks','Rocks']]) + select('Location', 'place', [['north','North plain'],['valley','Valley'],['ridge','Ridge']]) + select('Next action', 'action', [['explore','Explore it'],['photograph','Take photos'],['map','Map the area']]);
   } else if (id === 'art') {
     const icons = { star:'★', planet:'◐', rocket:'🚀' };
     visual = stage(`<div class="patch-scene"><div class="made-patch patch-${working.shape} border-${working.border}" style="--patch-color:${palettes[working.color]}"><span>${icons[working.symbol]}</span></div><div class="scene-caption">MISSION PATCH · ${working.symbol.toUpperCase()}</div></div>`, `A ${working.color} ${working.shape} mission patch with a ${working.symbol} symbol`);
@@ -173,20 +238,37 @@ $('activity-area').addEventListener('input', event => {
   if (!key || !activeSubject) return;
   working[key] = event.target.type === 'range' ? Number(event.target.value) : event.target.value;
   working = validState(activeSubject.id, working);
+  savedDesigns[activeSubject.id] = { ...working };
+  const state = lessonState(activeSubject.id);
+  state.touched = true;
+  lessonSteps[activeSubject.id] = state;
+  try { localStorage.setItem(designKey, JSON.stringify(savedDesigns)); } catch {}
+  saveLessons();
   eventKey = key;
   renderActivity(true);
   $('feedback').textContent = '';
 });
+$('previous-note').addEventListener('click', () => changeLesson(-1));
+$('next-note').addEventListener('click', () => changeLesson(1));
 $('save-creation').addEventListener('click', () => {
   if (!activeSubject) return;
+  const state = lessonState(activeSubject.id);
+  if (!completed[activeSubject.id] && state.step < 3) {
+    $('feedback').textContent = 'Read each short idea in the side panel, then finish your activity.';
+    return;
+  }
+  if (!completed[activeSubject.id] && !state.touched) {
+    $('feedback').textContent = 'Try changing at least one activity control to make this creation yours!';
+    return;
+  }
   savedDesigns[activeSubject.id] = { ...working };
-  completed[activeSubject.id] = { created: true };
-  try { localStorage.setItem(designKey, JSON.stringify(savedDesigns)); localStorage.setItem(storeKey, JSON.stringify(completed)); } catch { $('feedback').textContent = 'Created! Browser storage is unavailable, so this may not stay after you close the page.'; }
-  if (!$('feedback').textContent) $('feedback').textContent = `${activeSubject.piece} added to your mission board!`;
-  $('save-creation').textContent = 'Update mission piece ✓';
-  renderSubjectList(activeSubject.id);
+  completed[activeSubject.id] = { created: true, badge: badges[activeSubject.id] };
+  lessonSteps[activeSubject.id] = { step: 3, touched: true };
+  try { localStorage.setItem(designKey, JSON.stringify(savedDesigns)); localStorage.setItem(storeKey, JSON.stringify(completed)); saveLessons(); } catch { $('feedback').textContent = 'Created! Browser storage is unavailable, so this may not stay after you close the page.'; }
   renderBoard();
+  location.hash = `#complete/${activeSubject.id}`;
 });
+$('print-certificate').addEventListener('click', () => window.print());
 window.addEventListener('hashchange', showRoute);
 renderBoard();
 showRoute();
